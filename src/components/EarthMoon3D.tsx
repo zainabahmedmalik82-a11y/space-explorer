@@ -6,7 +6,7 @@ import * as THREE from 'three'
 const EARTH_R = 1.9
 const MOON_R = 0.38
 const MOON_ORBIT = 3.1
-const LAND_RED_THRESHOLD = 60 // zyada = kam land dots, kam = zyada land dots
+const LAND_RED_THRESHOLD = 30 // zyada = kam land dots, kam = zyada land dots
 const mouse = { x: 0, y: 0 }
 
 type Mask = { w: number; h: number; data: Uint8ClampedArray }
@@ -55,7 +55,7 @@ void main() {
   float outer = 1.0 - smoothstep(0.625, 1.0, d);
   float inner = smoothstep(0.5, 0.625, d);
   float body = (1.0 - smoothstep(0.6, 0.625, d)) * 0.06;
-  float i = pow(outer, 2.6) * inner * 0.85 + body;
+  float i = pow(outer, 2.6) * inner * 0.55 + body;
   gl_FragColor = vec4(0.30, 0.64, 1.0, 1.0) * i;
 }`
 
@@ -71,7 +71,7 @@ function makeMaterial() {
   })
 }
 
-/* ---------- Earth land mask (sirf dots ka rang/ghanapan chunne ke liye) ---------- */
+/* ---------- Earth land mask (dots ka rang/ghanapan chunne ke liye) ---------- */
 function loadMask(): Promise<Mask | null> {
   return new Promise((resolve) => {
     const img = new Image()
@@ -110,7 +110,7 @@ function buildEarth(count: number, mask: Mask | null) {
   const size = new Float32Array(count)
   const phase = new Float32Array(count)
   const land = new THREE.Color('#4DA3FF')
-  const ocean = new THREE.Color('#1A4A8F')
+  const ocean = new THREE.Color('#2F7BE0')
   const white = new THREE.Color('#E8ECF4')
   const tmp = new THREE.Color()
   let n = 0
@@ -127,7 +127,7 @@ function buildEarth(count: number, mask: Mask | null) {
       const px = Math.min(mask.w - 1, Math.floor(u * mask.w))
       const py = Math.min(mask.h - 1, Math.floor(v * mask.h))
       isLand = mask.data[(py * mask.w + px) * 4] > LAND_RED_THRESHOLD
-      if (!isLand && Math.random() > 0.3) continue
+      if (!isLand && Math.random() > 0.55) continue
     }
     pos[n * 3] = EARTH_R * Math.cos(lat) * Math.cos(lon)
     pos[n * 3 + 1] = EARTH_R * Math.sin(lat)
@@ -173,6 +173,11 @@ function Scene({ reduce, mobile, quality }: { reduce: boolean; mobile: boolean; 
   const orbit = useRef<THREE.Group>(null)
   const invalidate = useThree((s) => s.invalidate)
   const material = useMemo(makeMaterial, [])
+  const earthTex = useMemo(() => {
+    const t = new THREE.TextureLoader().load('/textures/earth.jpg')
+    t.colorSpace = THREE.SRGBColorSpace
+    return t
+  }, [])
   const [mask, setMask] = useState<Mask | null | undefined>(undefined)
 
   useEffect(() => {
@@ -234,6 +239,10 @@ function Scene({ reduce, mobile, quality }: { reduce: boolean; mobile: boolean; 
       <group ref={root}>
         <group rotation={[0, 0, 0.41]}>
           <group ref={spin}>
+            <mesh>
+              <sphereGeometry args={[EARTH_R * 0.985, 64, 64]} />
+              <meshBasicMaterial map={earthTex} color="#c8d4e6" />
+            </mesh>
             {earth && <points geometry={earth.geometry} material={material} frustumCulled={false} />}
           </group>
         </group>
