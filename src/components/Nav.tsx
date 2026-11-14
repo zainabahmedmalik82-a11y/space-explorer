@@ -1,3 +1,4 @@
+import { SITE_NAME } from '../config/site'
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Menu, X, Orbit } from 'lucide-react'
@@ -25,7 +26,7 @@ export default function Nav() {
       <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-4 md:px-6">
         <Link to="/" className="flex items-center gap-2 font-[family-name:var(--font-heading)] text-[15px] font-semibold">
           <Orbit size={20} className="text-[var(--earth)]" />
-          Space Explorer
+          {SITE_NAME}
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">

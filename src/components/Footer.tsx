@@ -1,3 +1,4 @@
+import { SITE_NAME } from '../config/site'
 export default function Footer() {
   return (
     <footer className="relative z-10 mt-24 border-t border-[var(--border)] bg-[var(--bg-1)]/70 backdrop-blur-xl">

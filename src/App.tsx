@@ -1,3 +1,4 @@
+import HomePage from './features/home/HomePage'
 import { Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import Placeholder from './components/Placeholder'
@@ -6,7 +7,7 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Placeholder title="Home" />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/missions" element={<Placeholder title="Missions" />} />
         <Route path="/missions/:missionId" element={<Placeholder title="Mission profile" />} />
         <Route path="/explorers/:id/map" element={<Placeholder title="Location map" />} />

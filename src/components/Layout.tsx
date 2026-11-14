@@ -7,15 +7,15 @@ import BackgroundParticles from './BackgroundParticles'
 export default function Layout() {
   const { pathname } = useLocation()
 
-  return (
+    return (
     <div
-      className="relative min-h-screen"
+      className="relative flex min-h-screen flex-col"
       style={{
         background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(77,163,255,0.06), transparent 70%), var(--bg-0)',
       }}
     >
       <BackgroundParticles />
-      <div className="relative z-10">
+      <div className="relative z-10 flex-1">
         <Nav />
         <motion.main
           key={pathname}
